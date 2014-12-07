@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+CONFDIR=${XDG_CONFIG_HOME:-$HOME/.config}/plug-repo
+mkdir -p $CONFDIR
+REPO="$CONFDIR/$1"
+
+case "$2" in
+  "add")
+    echo $3 > $REPO
+    ;;
+  *)
+    if [ ! -f $REPO ]; then
+      echo "Repository $1 not found!"
+      exit 1
+    fi
+    URL=$(<$REPO)
+    ssh plug-repo@$URL $2 $3 $4
+    ;;
+esac
